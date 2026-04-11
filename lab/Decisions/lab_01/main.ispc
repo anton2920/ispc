@@ -26,27 +26,29 @@ main()
 	uniform float weights[COLS] = {0.5, 0.3, 0.2};
 #endif
 
-	uniform int rows = ROWS;
-	uniform int cols = COLS;
+	uniform float tdata[COLS][ROWS];
+
+	uniform int rows = ROWS, cols = COLS;
+	uniform int trows = COLS, tcols = ROWS;
 
 	print("Initial data: "); MatrixPrintln(&data[0][0], rows, cols);
-	MatrixTranspose(&data[0][0], &rows, &cols);
-	print("Transposed data: "); MatrixPrintln(&data[0][0], rows, cols);
+	MatrixTranspose(&tdata[0][0], &data[0][0], rows, cols);
+	print("Transposed data: "); MatrixPrintln(&tdata[0][0], trows, tcols);
 
-	uniform float mins[ROWS];
-	uniform float maxs[ROWS];
-	for (uniform int i = 0; i < rows; i++) {
-		mins[i] = ArrayMin(&data[i][0], cols);
-		maxs[i] = ArrayMax(&data[i][0], cols);
+	uniform float mins[COLS];
+	uniform float maxs[COLS];
+	for (uniform int i = 0; i < trows; i++) {
+		mins[i] = ArrayMin(&tdata[i][0], tcols);
+		maxs[i] = ArrayMax(&tdata[i][0], tcols);
 	}
-	print("Mins: "); ArrayPrintln(mins, cols);
-	print("Maxs: "); ArrayPrintln(maxs, cols);
+	print("Mins: "); ArrayPrintln(mins, tcols);
+	print("Maxs: "); ArrayPrintln(maxs, tcols);
 
-	foreach (i = 0...rows, j = 0...cols) {
-		data[i][j] = (data[i][j] - mins[i]) / (maxs[i] - mins[i]);
+	foreach (i = 0...trows, j = 0...tcols) {
+		tdata[i][j] = (tdata[i][j] - mins[i]) / (maxs[i] - mins[i]);
 	}
-	print("Normalized data: "); MatrixPrintln(&data[0][0], rows, cols);
-	MatrixTranspose(&data[0][0], &rows, &cols);
+	print("Normalized data: "); MatrixPrintln(&tdata[0][0], trows, tcols);
+	MatrixTranspose(&data[0][0], &tdata[0][0], trows, tcols);
 	print("Transposed normalized data: "); MatrixPrintln(&data[0][0], rows, cols);
 
 	uniform float scores[ROWS];
