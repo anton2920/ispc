@@ -1,4 +1,0 @@
-template <typename T> uniform T ArrayMin(uniform T array[], uniform int len);
-template <typename T> uniform T ArrayMax(uniform T array[], uniform int len);
-template <typename T> void ArrayPrint(uniform T array[], uniform int len);
-template <typename T> void ArrayPrintln(uniform T array[], uniform int len);

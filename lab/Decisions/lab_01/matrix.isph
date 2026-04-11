@@ -1,3 +1,0 @@
-template <typename T> void MatrixPrint(uniform T matrix[], uniform int rows, uniform int cols);
-template <typename T> void MatrixPrintln(uniform T matrix[], uniform int rows, uniform int cols);
-template <typename T> void MatrixTranspose(uniform T matrix[], int *uniform rows, int *uniform cols);
