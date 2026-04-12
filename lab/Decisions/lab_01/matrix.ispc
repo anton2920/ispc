@@ -45,3 +45,63 @@ MatrixTranspose(uniform T dst[], uniform T src[], uniform int rows, uniform int 
 		}
 	}
 }
+
+
+uniform int
+GCD(uniform int a, uniform int b)
+{
+	if (a == 0) {
+		return b;
+	} else {
+		return GCD(b%a, a);
+	}
+}
+
+
+template <typename T>
+void
+MatrixTranspose(uniform T matrix[], int *uniform rows, int *uniform cols)
+{
+	uniform T *uniform tmp = (float *uniform)alloca(max(*rows, *cols) * sizeof(T));
+	uniform int m = *rows, n = *cols;
+	uniform int c = GCD(m, n);
+	uniform int a = m/c;
+	uniform int b = n/c;
+
+	if (c > 1) {
+		for (uniform int j = 0; j < n; j++) {
+			for (uniform int i = 0; i < m; i++) {
+				uniform int r = (i + j/b) % m;
+				tmp[i] = matrix[r*n+j];
+			}
+			for (uniform int i = 0; i < m; i++) {
+				matrix[i*n+j] = tmp[i];
+			}
+		}
+	}
+
+	for (uniform int i = 0; i < m; i++) {
+		for (uniform int j = 0; j < n; j++) {
+			uniform int d = (((i + j/b) % m) + j*m) % n;
+			tmp[d] = matrix[i*n+j];
+		}
+		for (uniform int j = 0; j < n; j++) {
+			matrix[i*n+j] = tmp[j];
+		}
+	}
+
+	for (uniform int j = 0; j < n; j++) {
+		for (uniform int i = 0; i < m; i++) {
+			uniform int s = (j + i*n - i/a) % m;
+			tmp[i] = matrix[s*n+j];
+		}
+		for (uniform int i = 0; i < m; i++) {
+			matrix[i*n+j] = tmp[i];
+		}
+	}
+
+	*rows = n;
+	*cols = m;
+}
+
+
