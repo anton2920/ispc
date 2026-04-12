@@ -50,11 +50,27 @@ MatrixTranspose(uniform T dst[], uniform T src[], uniform int rows, uniform int 
 uniform int
 GCD(uniform int a, uniform int b)
 {
-	if (a == 0) {
+	if (a == b)
+		return a;
+	if (a == 0)
 		return b;
-	} else {
-		return GCD(b%a, a);
+	if (b == 0)
+		return a;
+
+	if (~a & 1) {
+		if (b & 1)
+			return GCD(a >> 1, b);
+		else
+			return GCD(a >> 1, b >> 1) << 1;
 	}
+
+	if (~b & 1)
+		return GCD(a, b >> 1);
+
+	if (a > b)
+		return GCD((a - b) >> 1, b);
+
+	return GCD((b - a) >> 1, a);
 }
 
 
@@ -68,34 +84,57 @@ MatrixTranspose(uniform T matrix[], int *uniform rows, int *uniform cols)
 	uniform int a = m/c;
 	uniform int b = n/c;
 
+	#define UNSAFE_USE_DOUBLES_FOR_MODULUS
+
 	if (c > 1) {
 		for (uniform int j = 0; j < n; j++) {
-			for (uniform int i = 0; i < m; i++) {
-				uniform int r = (i + j/b) % m;
+			foreach (i = 0...m) {
+				#ifdef UNSAFE_USE_DOUBLES_FOR_MODULUS
+					int r = (int)fmod((double)(i + j/b), (double)m);
+				#else
+					#pragma ignore warning(perf)
+					int r = (i + j/b) % m;
+				#endif
+				#pragma ignore warning(perf)
 				tmp[i] = matrix[r*n+j];
 			}
-			for (uniform int i = 0; i < m; i++) {
+			foreach (i = 0...m) {
+				#pragma ignore warning(perf)
 				matrix[i*n+j] = tmp[i];
 			}
 		}
 	}
 
 	for (uniform int i = 0; i < m; i++) {
-		for (uniform int j = 0; j < n; j++) {
-			uniform int d = (((i + j/b) % m) + j*m) % n;
+		foreach (j = 0...n) {
+			#ifdef UNSAFE_USE_DOUBLES_FOR_MODULUS
+				int d = fmod((double)(fmod(i + floor((double)j/b), m) + j*m), (double)n);
+			#else
+				#pragma ignore warning(perf)
+				int d = (((i + j/b) % m) + j*m) % n;
+			#endif
+			#pragma ignore warning(perf)
 			tmp[d] = matrix[i*n+j];
 		}
-		for (uniform int j = 0; j < n; j++) {
+		foreach (j = 0...n) {
+			#pragma ignore warning(perf)
 			matrix[i*n+j] = tmp[j];
 		}
 	}
 
 	for (uniform int j = 0; j < n; j++) {
-		for (uniform int i = 0; i < m; i++) {
-			uniform int s = (j + i*n - i/a) % m;
+		foreach (i = 0...m) {
+			#ifdef UNSAFE_USE_DOUBLES_FOR_MODULUS
+				int s = (int)fmod((double)(j + i*n - floor((double)i/a)), (double)m);
+			#else
+				#pragma ignore warning(perf)
+				int s = (j + i*n - i/a) % m;
+			#endif
+			#pragma ignore warning(perf)
 			tmp[i] = matrix[s*n+j];
 		}
-		for (uniform int i = 0; i < m; i++) {
+		foreach (i = 0...m) {
+			#pragma ignore warning(perf)
 			matrix[i*n+j] = tmp[i];
 		}
 	}
