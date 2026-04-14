@@ -84,13 +84,13 @@ MatrixTranspose(uniform T matrix[], int *uniform rows, int *uniform cols)
 	uniform int a = m/c;
 	uniform int b = n/c;
 
-	#define UNSAFE_USE_DOUBLES_FOR_MODULUS
+	#define UNSAFE_USE_DOUBLES_FOR_DIVISION
 
 	if (c > 1) {
 		for (uniform int j = 0; j < n; j++) {
 			foreach (i = 0...m) {
-				#ifdef UNSAFE_USE_DOUBLES_FOR_MODULUS
-					int r = (int)fmod((double)(i + j/b), (double)m);
+				#ifdef UNSAFE_USE_DOUBLES_FOR_DIVISION
+					int r = fmod((double)(i + j/b), m);
 				#else
 					#pragma ignore warning(perf)
 					int r = (i + j/b) % m;
@@ -107,8 +107,8 @@ MatrixTranspose(uniform T matrix[], int *uniform rows, int *uniform cols)
 
 	for (uniform int i = 0; i < m; i++) {
 		foreach (j = 0...n) {
-			#ifdef UNSAFE_USE_DOUBLES_FOR_MODULUS
-				int d = fmod((double)(fmod(i + floor((double)j/b), m) + j*m), (double)n);
+			#ifdef UNSAFE_USE_DOUBLES_FOR_DIVISION
+				int d = fmod(fmod(i + floor((double)j/b), m) + j*m, n);
 			#else
 				#pragma ignore warning(perf)
 				int d = (((i + j/b) % m) + j*m) % n;
@@ -124,8 +124,8 @@ MatrixTranspose(uniform T matrix[], int *uniform rows, int *uniform cols)
 
 	for (uniform int j = 0; j < n; j++) {
 		foreach (i = 0...m) {
-			#ifdef UNSAFE_USE_DOUBLES_FOR_MODULUS
-				int s = (int)fmod((double)(j + i*n - floor((double)i/a)), (double)m);
+			#ifdef UNSAFE_USE_DOUBLES_FOR_DIVISION
+				int s = fmod((j + i*n - floor((double)i/a)), m);
 			#else
 				#pragma ignore warning(perf)
 				int s = (j + i*n - i/a) % m;
