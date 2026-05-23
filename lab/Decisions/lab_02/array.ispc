@@ -27,6 +27,18 @@ ArrayMax(uniform T array[], uniform int len)
 
 
 template <typename T>
+uniform float
+ArrayNorm2(uniform T array[], uniform int len)
+{
+	T sum = 0;
+	foreach (i = 0...len) {
+		sum += array[i] * array[i];
+	}
+	return sqrt(reduce_add(sum));
+}
+
+
+template <typename T>
 void
 ArrayPrint(uniform T array[], uniform int len)
 {
@@ -59,6 +71,18 @@ ArrayRMS(uniform T array[], uniform int len)
 		sum += array[i]*array[i];
 	}
 	return sqrt((uniform float)reduce_add(sum) / len);
+}
+
+
+template <typename T>
+uniform T
+ArraySum(uniform T array[], uniform int len)
+{
+	T sum = 0;
+	foreach (i = 0...len) {
+		sum += array[i];
+	}
+	return reduce_add(sum);
 }
 
 

@@ -9,7 +9,7 @@ enum {
 
 
 export
-void
+uniform int
 main()
 {
 #if 1
@@ -71,8 +71,9 @@ main()
 		}
 		scores[i] = reduce_add(score);
 	}
-
 	print("Scores: "); ArrayPrintln(scores, rows);
+
+	return 0;
 }
 
 

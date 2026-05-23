@@ -1,5 +1,20 @@
 template <typename T>
 void
+MatrixMultiply(uniform T dst[], uniform T src1[], uniform T src2[], uniform int rows1, uniform int cols1, uniform int cols2)
+{
+	for (uniform int i = 0; i < rows1; i++) {
+		foreach (j = 0...cols2) {
+			dst[i*cols2+j] = 0;
+			for (uniform int k = 0; k < cols1; k++) {
+				dst[i*cols2+j] += src1[i*cols1+k] * src2[k*cols2+j];
+			}
+		}
+	}
+}
+
+
+template <typename T>
+void
 MatrixPrint(uniform T matrix[], uniform int rows, uniform int cols)
 {
 	print("[\n");

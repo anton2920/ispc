@@ -8,7 +8,7 @@ enum {
 };
 
 export
-void
+uniform int
 main()
 {
 #if 1
@@ -44,12 +44,12 @@ main()
 	MatrixTranspose(&tdata[0][0], &data[0][0], rows, cols);
 	print("Transposed: "); MatrixPrintln(&tdata[0][0], trows, tcols);
 
-	uniform float rmses[COLS];
+	uniform float norms[COLS];
 	for (uniform int i = 0; i < trows; i++) {
-		rmses[i] = ArrayRMS(&tdata[i][0], tcols) * sqrt((uniform float)tcols);
+		norms[i] = ArrayNorm2(&tdata[i][0], tcols);
 	}
 	foreach (i = 0...trows, j = 0...tcols) {
-		tdata[i][j] = tdata[i][j] * weights[i] / rmses[i];
+		tdata[i][j] = tdata[i][j] * weights[i] / norms[i];
 	}
 	print("Weighted & normalized: "); MatrixPrintln(&tdata[0][0], trows, tcols);
 
@@ -87,6 +87,8 @@ main()
 		closenesses[i] = aidealDists[i] / (idealDists[i] + aidealDists[i]);
 	}
 	print("Closenesses: "); ArrayPrintln(&closenesses[0], rows);
+
+	return 0;
 }
 
 
