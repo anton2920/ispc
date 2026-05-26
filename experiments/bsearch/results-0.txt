@@ -1,0 +1,29 @@
+1024 * 1024
+	BinarySearchGo-8     166.6n ± 5%
+	BinarySearchISPC-8   159.0n ± 1%
+	BSearchISPC-8        200.0n ± 2%
+	BSearchC-8           181.1n ± 1%
+
+16 * 1024 * 1024
+	BinarySearchGo-8     481.8n ± 1%
+	BinarySearchISPC-8   484.2n ± 0%
+	BSearchISPC-8        549.9n ± 0%
+	BSearchC-8           496.7n ± 0%
+
+32 * 1024 * 1024
+	BinarySearchGo-8     563.8n ± 1%
+	BinarySearchISPC-8   567.9n ± 1%
+	BSearchISPC-8        615.0n ± 1%
+	BSearchC-8           572.4n ± 0%
+
+64 * 1024 * 1024
+	BinarySearchGo-8     634.0n ± 1%
+	BinarySearchISPC-8   640.9n ± 1%
+	BSearchISPC-8        680.1n ± 1%
+	BSearchC-8           639.4n ± 1%
+
+128 * 1024 * 1024
+	BinarySearchGo-8     676.2n ± 1%
+	BinarySearchISPC-8   687.2n ± 1%
+	BSearchISPC-8        748.9n ± 1%
+	BSearchC-8           682.7n ± 0%
