@@ -68,12 +68,13 @@ BSearchProper:
 	vpcmpgtd	%ymm0, %ymm4, %ymm7		# ltMask   = needles < elements
 	vmovmskps	%ymm7, %ebx			# rindex   = extract_sign_bits(ltMask)
 
+	vmovdqa	%ymm3, (%rsp)	# kmem = k
+
 	movzbl	%bl, %ebx	# rindex = rindex & 0xFF
 	tzcntl	%ebx, %ebx	# rindex = trailing_zeros_count(rindex)
 	leal	-1(%ebx), %eax  # lindex = rindex - 1
 	and	$0b111, %eax	# lindex = lindex & 0b111
 
-	vmovdqa	%ymm3, (%rsp)	# kmem = k
 	movl	(%rsp, %rax, 4), %ecx	# l = kmem[lindex]
 	incl	%ecx			# l += 1
 	movl	(%rsp, %rbx, 4), %esi	# r = kmem[rindex]

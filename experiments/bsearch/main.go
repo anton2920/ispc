@@ -2,10 +2,14 @@ package main
 
 /*
 #cgo CFLAGS: -std=gnu89 -O3 -g -mavx2 -march=skylake -fno-pic
-#cgo LDFLAGS: -L. -lbsearch
+//#cgo LDFLAGS: -L. -lbsearch
 #include <immintrin.h>
 #include <x86intrin.h>
-#include "bsearch.h"
+#if 0
+	#include "bsearch.h"
+#else
+	#include <stdint.h>
+#endif
 
 typedef int32_t int32;
 
