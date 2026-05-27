@@ -77,6 +77,11 @@ case $TARGET in
 		printv ./$PROJECT.test -test.run=^Benchmark -test.bench=.  $@
 		GODEBUG=cgocheck=0 ./$PROJECT.test -test.run=^Benchmark -test.bench=. $@ | tee tmp.txt
 		benchstat tmp.txt >bench-result.txt
+		grep BinarySearch tmp.txt | grep -v Opt | sed 's/Binary//g' >bench-binsearch.txt
+		grep BSearch tmp.txt | sed 's/BSearchProper/Search/g' >bench-bsearch.txt
+		grep BinarySearchOpt tmp.txt | sed 's/BinarySearchOpt/Search/g' >bench-opt.txt
+		grep QuadSearch tmp.txt | sed 's/Quad//g' >bench-quad.txt
+		benchstat bench-binsearch.txt bench-bsearch.txt bench-opt.txt bench-quad.txt >results.txt
 		# rm tmp.txt
 		;;
 	check-bench-compare)

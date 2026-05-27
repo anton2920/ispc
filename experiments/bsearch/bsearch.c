@@ -141,3 +141,74 @@ BSearch(int32 haystack[], int32 n, int32 needle)
 	return -1;
 }
 #endif
+
+
+void
+FlushFromCache(int32 array[], int n)
+{
+	int i;
+
+	for (i = 0; i < n; i += 64/sizeof(*array)) {
+		_mm_clflushopt(&array[i]);
+	}
+}
+
+
+int32
+simd_quad(int32 carr[], int32 cardinality, int32 pos)
+{
+    const int32_t gap = 16;
+    int32 j;
+
+    if (cardinality < gap) {
+      for (j = 0; j < cardinality; j++) {
+          if (carr[j] == pos) return j;
+        }
+        return -1;
+    }
+    int32_t num_blocks = cardinality / gap;
+    int32_t base = 0;
+    int32_t n = num_blocks;
+    while (n > 3) {
+      int32_t quarter = n >> 2;
+
+      int32_t k1 = carr[(base + quarter + 1) * gap - 1];
+      int32_t k2 = carr[(base + 2 * quarter + 1) * gap - 1];
+      int32_t k3 = carr[(base + 3 * quarter + 1) * gap - 1];
+
+      int32_t c1 = (k1 < pos);
+      int32_t c2 = (k2 < pos);
+      int32_t c3 = (k3 < pos);
+
+      base += (c1 + c2 + c3) * quarter;
+      n -= 3 * quarter;
+    }
+    while (n > 1) {
+        int32_t half = n >> 1;
+        base = (carr[(base + half + 1) * gap - 1] < pos)
+                 ? base + half : base;
+        n -= half;
+    }
+    int32_t lo = (carr[(base + 1) * gap - 1] < pos)
+                ? base + 1 : base;
+
+#if 1
+    if (lo < num_blocks) {
+        const uint32_t *blk = carr + lo * gap;
+        __m256i needle = _mm256_set1_epi32(pos);
+        __m256i v0 = _mm256_loadu_si256((const __m256i *)blk);
+        __m256i v1 = _mm256_loadu_si256((const __m256i *)(blk + 8));
+        __m256i mask0 = _mm256_cmpeq_epi32(v0, needle);
+        __m256i mask1 = _mm256_cmpeq_epi32(v1, needle);
+        volatile int32 res0 = __builtin_ctz(_mm256_movemask_ps((__m256)mask0));
+        volatile int32 res1 = __builtin_ctz(_mm256_movemask_ps((__m256)mask1));
+        return lo * gap + ((res0 == 32) ? res1 + 8 : res0);
+    }
+#endif
+
+    for (j = num_blocks * gap; j < cardinality; j++) {
+        int32 v = carr[j];
+        if (v >= pos) return (v == pos) ? j : -1;
+    }
+    return -1;
+}
