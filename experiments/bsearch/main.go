@@ -28,8 +28,8 @@ bsr(int32 n)
 int32	LinearSearch(int32 haystack[], int32 n, int32 needle);
 int32	BinarySearch(int32 haystack[], int32 n, int32 needle);
 int32	BSearch(int32 haystack[], int32 n, int32 needle);
-int32	BSearchProper(int32 haystack[], int32 n, int32 needle);
 int32	BinarySearchOpt(int32 haystack[], int32 n, int32 needle);
+int32	BinarySearchOpt2(int32 haystack[], int32 n, int32 needle);
 int32	simd_quad(int32 carr[], int32 cardinality, int32 pos);
 
 void	FlushFromCache(int32 array[], int n);
@@ -44,28 +44,23 @@ import (
 )
 
 func LinearSearch(haystack []int32, needle int32) int32 {
-	//return int32(C.LinearSearch((*C.int32)(unsafe.Pointer(&haystack[0])), C.int32(len(haystack)), C.int32(needle)))
 	return cgocall.CGOCall(uintptr(C.LinearSearch), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
 }
 
 func BinarySearch(haystack []int32, needle int32) int32 {
-	//return int32(C.BinarySearch((*C.int32)(unsafe.Pointer(&haystack[0])), C.int32(len(haystack)), C.int32(needle)))
 	return cgocall.CGOCall(uintptr(C.BinarySearch), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
 }
 
-func BinarySearchOpt(haystack []int32, needle int32) int32 {
-	//return int32(C.BinarySearch((*C.int32)(unsafe.Pointer(&haystack[0])), C.int32(len(haystack)), C.int32(needle)))
-	return cgocall.CGOCall(uintptr(C.BinarySearchOpt), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
-}
-
 func BSearch(haystack []int32, needle int32) int32 {
-	//return int32(C.BSearchProper((*C.int32)(unsafe.Pointer(&haystack[0])), C.int32(len(haystack)), C.int32(needle)))
 	return cgocall.CGOCall(uintptr(C.BSearch), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
 }
 
-func BSearchProper(haystack []int32, needle int32) int32 {
-	//return int32(C.BSearchProperProper((*C.int32)(unsafe.Pointer(&haystack[0])), C.int32(len(haystack)), C.int32(needle)))
-	return cgocall.CGOCall(uintptr(C.BSearchProper), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
+func BinarySearchOpt(haystack []int32, needle int32) int32 {
+	return cgocall.CGOCall(uintptr(C.BinarySearchOpt), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
+}
+
+func BinarySearchOpt2(haystack []int32, needle int32) int32 {
+	return cgocall.CGOCall(uintptr(C.BinarySearchOpt2), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
 }
 
 func QuadSearch(haystack []int32, needle int32) int32 {
@@ -97,7 +92,7 @@ func main() {
 	//needle := needles[0]
 	//needle := needles[len(needles)-1]
 	_ = needles
-	actual := BinarySearchOpt(array, needle)
+	actual := BinarySearchOpt2(array, needle)
 	if actual > 0 {
 		println(BinarySearchGo(array, needle), actual, array[actual] == needle)
 	}

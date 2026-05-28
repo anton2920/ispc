@@ -78,10 +78,11 @@ case $TARGET in
 		GODEBUG=cgocheck=0 ./$PROJECT.test -test.run=^Benchmark -test.bench=. $@ | tee tmp.txt
 		benchstat tmp.txt >bench-result.txt
 		grep BinarySearch tmp.txt | grep -v Opt | sed 's/Binary//g' >bench-binsearch.txt
-		grep BSearch tmp.txt | sed 's/BSearchProper/Search/g' >bench-bsearch.txt
-		grep BinarySearchOpt tmp.txt | sed 's/BinarySearchOpt/Search/g' >bench-opt.txt
+		grep BSearch tmp.txt | sed 's/BSearch/Search/g' >bench-bsearch.txt
+		grep BinarySearchOpt tmp.txt | grep -v Opt2 | sed 's/BinarySearchOpt/Search/g' >bench-opt.txt
+		grep BinarySearchOpt2 tmp.txt | sed 's/BinarySearchOpt2/Search/g' >bench-opt2.txt
 		grep QuadSearch tmp.txt | sed 's/Quad//g' >bench-quad.txt
-		benchstat bench-binsearch.txt bench-bsearch.txt bench-opt.txt bench-quad.txt >results.txt
+		benchstat bench-binsearch.txt bench-bsearch.txt bench-opt.txt bench-opt2.txt bench-quad.txt >results.txt
 		# rm tmp.txt
 		;;
 	check-bench-compare)

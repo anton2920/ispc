@@ -25,7 +25,7 @@ ArrayPrint(int32 array[], int n)
 
 
 int32
-LinearSearch(int32 haystack[], int32 n, int32 needle)
+LinearSearchC(int32 haystack[], int32 n, int32 needle)
 {
 	int32 i;
 
@@ -40,7 +40,7 @@ LinearSearch(int32 haystack[], int32 n, int32 needle)
 
 
 int32
-BinarySearch(int32 haystack[], int32 n, int32 needle)
+BinarySearchC(int32 haystack[], int32 n, int32 needle)
 {
 	int32 l = 0, r = n - 1;
 
@@ -56,7 +56,7 @@ BinarySearch(int32 haystack[], int32 n, int32 needle)
 
 #if 0
 int
-BSearch(int32 haystack[], int32 n, int32 needle)
+BSearchC(int32 haystack[], int32 n, int32 needle)
 {
 	enum {
 		programCount = 8,
@@ -99,7 +99,7 @@ BSearch(int32 haystack[], int32 n, int32 needle)
 }
 #else
 int
-BSearch(int32 haystack[], int32 n, int32 needle)
+BSearchC(int32 haystack[], int32 n, int32 needle)
 {
 	enum {
 		programCount = 8,
