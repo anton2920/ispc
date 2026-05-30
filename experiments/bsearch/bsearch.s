@@ -5,6 +5,29 @@
 	vpbroadcastd	\through, \to
 .endm
 
+.macro	BinarySearchBodyBranchless
+	movl	$-1, %eax
+0:
+	cmp	%esi, %ecx	# while (l <= r)
+	jg	1f
+
+	leal	(%ecx, %esi), %ebx	# k = l + r
+	shr	$0x1, %ebx		# k = (l + r) / 2
+	leal	+1(%ebx), %r8d
+	leal	-1(%ebx), %r9d
+
+	cmpl	%edx, (%rdi, %rbx, 4) 	# if (needle == haystack[k])
+	cmovle	%r8d, %ecx
+	cmovge	%r9d, %esi
+
+	jmp	0b
+
+1:
+	subl	%esi, %ecx
+	cmpl	$0x1, %ecx
+	cmovg	%ebx, %eax
+.endm
+
 
 .macro	BinarySearchBody
 	movl	$-1, %eax

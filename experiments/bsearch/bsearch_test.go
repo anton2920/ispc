@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand"
 	"os"
 	"runtime"
 	"slices"
@@ -108,7 +109,8 @@ type testData struct {
 }
 
 const (
-	usePreparedData = false
+	usePreparedData = true
+	randomInitial   = false
 	flushCache      = false
 )
 
@@ -131,6 +133,9 @@ func BenchmarkLinearSearch(b *testing.B) {
 		}
 		b.Run(steps2str[steps[i]], func(b *testing.B) {
 			var i int
+			if randomInitial {
+				 i = rand.Intn(len(needles))
+			}
 			for b.Loop() {
 				if flushCache {
 					b.StopTimer()
@@ -159,6 +164,9 @@ func BenchmarkBinarySearch(b *testing.B) {
 		}
 		b.Run(steps2str[steps[i]], func(b *testing.B) {
 			var i int
+			if randomInitial {
+				i = rand.Intn(len(needles))
+			}
 			for b.Loop() {
 				if flushCache {
 					b.StopTimer()
@@ -186,6 +194,9 @@ func BenchmarkBSearch(b *testing.B) {
 		}
 		b.Run(steps2str[steps[i]], func(b *testing.B) {
 			var i int
+			if randomInitial {
+				i = rand.Intn(len(needles))
+			}
 			for b.Loop() {
 				if flushCache {
 					b.StopTimer()
@@ -213,6 +224,9 @@ func BenchmarkBinarySearchOpt(b *testing.B) {
 		}
 		b.Run(steps2str[steps[i]], func(b *testing.B) {
 			var i int
+			if randomInitial {
+				i = rand.Intn(len(needles))
+			}
 			for b.Loop() {
 				if flushCache {
 					b.StopTimer()
@@ -240,6 +254,9 @@ func BenchmarkBinarySearchOpt2(b *testing.B) {
 		}
 		b.Run(steps2str[steps[i]], func(b *testing.B) {
 			var i int
+			if randomInitial {
+				i = rand.Intn(len(needles))
+			}
 			for b.Loop() {
 				if flushCache {
 					b.StopTimer()
@@ -267,6 +284,9 @@ func BenchmarkQuadSearch(b *testing.B) {
 		}
 		b.Run(steps2str[steps[i]], func(b *testing.B) {
 			var i int
+			if randomInitial {
+				i = rand.Intn(len(needles))
+			}
 			for b.Loop() {
 				if flushCache {
 					b.StopTimer()

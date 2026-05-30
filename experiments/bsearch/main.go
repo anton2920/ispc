@@ -92,7 +92,7 @@ func main() {
 	//needle := needles[0]
 	//needle := needles[len(needles)-1]
 	_ = needles
-	actual := BinarySearchOpt2(array, needle)
+	actual := BinarySearchOpt(array, needle)
 	if actual > 0 {
 		println(BinarySearchGo(array, needle), actual, array[actual] == needle)
 	}
