@@ -1,0 +1,14 @@
+                         │ bench-binsearch.txt │            bench-opt.txt            │
+                         │       sec/op        │    sec/op     vs base               │
+BinarySearch/32-8                  6.815n ± 0%   11.365n ± 3%  +66.76% (p=0.000 n=8)
+BinarySearch/1024-8                44.41n ± 0%    42.55n ± 0%   -4.21% (p=0.000 n=8)
+BinarySearch/8192-8                59.61n ± 0%    65.28n ± 0%   +9.50% (p=0.000 n=8)
+BinarySearch/262144-8              141.2n ± 1%    141.3n ± 1%        ~ (p=0.660 n=8)
+BinarySearch/2097152-8             203.8n ± 1%    191.2n ± 0%   -6.18% (p=0.000 n=8)
+BinarySearch/8388608-8             409.4n ± 1%    371.8n ± 1%   -9.18% (p=0.000 n=8)
+BinarySearch/33554432-8            597.4n ± 0%    574.1n ± 0%   -3.89% (p=0.000 n=8)
+BinarySearch/67108864-8            653.4n ± 1%    640.5n ± 0%   -1.98% (p=0.000 n=8)
+BinarySearch/134217728-8           749.0n ± 1%    722.0n ± 1%   -3.59% (p=0.000 n=8)
+BinarySearch/268435456-8           814.1n ± 1%    774.6n ± 2%   -4.86% (p=0.000 n=8)
+BinarySearch/536870912-8           947.1n ± 1%    911.5n ± 0%   -3.76% (p=0.000 n=8)
+geomean                            216.1n         220.3n        +1.97%
