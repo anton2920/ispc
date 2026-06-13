@@ -28,10 +28,9 @@ printv()
 
 buildISPC()
 {
-	# run ispc $@ --target=avx2-i32x8 -o bsearch.o -h bsearch.h bsearch.ispc
-	# run gcc -c -std=gnu89 -o bsearch2.o $@ -mavx2 -march=skylake bsearch.c
-	# run ar rc libbsearch.a *.o
-	# run rm -f *.o
+	run ispc $@ --target=host -o bsearch.o -h bsearch.h bsearch.ispc
+	run ar rc libbsearch.a *.o
+	run rm -f *.o
 }
 
 # NOTE(anton2920): don't like Google spying on me.
@@ -78,7 +77,8 @@ case $TARGET in
 		GODEBUG=cgocheck=0 ./$PROJECT.test -test.run=^Benchmark -test.bench=. $@ | tee tmp.txt
 		benchstat tmp.txt >bench-result.txt
 		grep BinarySearch tmp.txt | grep -v Opt | sed 's/Binary//g' >bench-binsearch.txt
-		grep BSearch tmp.txt | sed 's/BSearch/Search/g' >bench-bsearch.txt
+		grep BSearch tmp.txt | grep -v ISPC | sed 's/BSearch/Search/g' >bench-bsearch.txt
+		grep BSearchISPC tmp.txt | sed 's/BSearchISPC/Search/g' >bench-bsearch-ispc.txt
 		grep BinarySearchOpt tmp.txt | grep -v Opt2 | sed 's/BinarySearchOpt/Search/g' >bench-opt.txt
 		grep BinarySearchOpt2 tmp.txt | sed 's/BinarySearchOpt2/Search/g' >bench-opt2.txt
 		grep QuadSearch tmp.txt | sed 's/Quad//g' >bench-quad.txt

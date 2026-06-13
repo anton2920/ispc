@@ -2,10 +2,10 @@ package main
 
 /*
 #cgo CFLAGS: -std=gnu89 -O3 -g -mavx2 -march=skylake -fno-pic
-//#cgo LDFLAGS: -L. -lbsearch
+#cgo LDFLAGS: -L. -lbsearch
 #include <immintrin.h>
 #include <x86intrin.h>
-#if 0
+#if 1
 	#include "bsearch.h"
 #else
 	#include <stdint.h>
@@ -55,6 +55,10 @@ func BSearch(haystack []int32, needle int32) int32 {
 	return cgocall.CGOCall(uintptr(C.BSearch), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
 }
 
+func BSearchISPC(haystack []int32, needle int32) int32 {
+	return cgocall.CGOCall(uintptr(C.BSearchISPC), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
+}
+
 func BinarySearchOpt(haystack []int32, needle int32) int32 {
 	return cgocall.CGOCall(uintptr(C.BinarySearchOpt), uintptr(unsafe.Pointer(&haystack[0])), int32(len(haystack)), needle)
 }
@@ -88,11 +92,12 @@ func GetTestData(n int) ([]int32, []int32) {
 
 func main() {
 	array, needles := GetTestData(1024)
-	needle := int32(1042974411)
+	//needle := int32(1042974411)
+	needle := int32(141734987)
 	//needle := needles[0]
 	//needle := needles[len(needles)-1]
 	_ = needles
-	actual := BinarySearchOpt(array, needle)
+	actual := BSearchISPC(array, needle)
 	if actual > 0 {
 		println(BinarySearchGo(array, needle), actual, array[actual] == needle)
 	}
